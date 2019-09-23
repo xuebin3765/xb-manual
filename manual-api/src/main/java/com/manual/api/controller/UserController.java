@@ -15,6 +15,4 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/api/user")
 public class UserController {
     private static final Logger logger = LoggerFactory.getLogger(ApplicationManualApi.class);
-
-//    public
 }

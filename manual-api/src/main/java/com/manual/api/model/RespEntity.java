@@ -1,5 +1,7 @@
 package com.manual.api.model;
 
+import com.alibaba.fastjson.JSON;
+
 /**
  * desc:
  * author: xuebin3765@163.com
@@ -32,5 +34,11 @@ public class RespEntity {
 
     public void setData(String data) {
         this.data = data;
+    }
+
+
+    @Override
+    public String toString() {
+        return JSON.toJSONString(this);
     }
 }
