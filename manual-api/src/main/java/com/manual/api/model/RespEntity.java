@@ -36,6 +36,7 @@ public class RespEntity {
         this.data = data;
     }
 
+    public static String Resp
 
     @Override
     public String toString() {
