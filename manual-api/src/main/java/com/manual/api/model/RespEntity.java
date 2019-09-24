@@ -1,6 +1,8 @@
 package com.manual.api.model;
 
 import com.alibaba.fastjson.JSON;
+import com.manual.api.constant.ResponseCode;
+import com.manual.api.constant.ResponseMsg;
 
 /**
  * desc:
@@ -36,7 +38,28 @@ public class RespEntity {
         this.data = data;
     }
 
-    public static String Resp
+    public RespEntity() {}
+
+    public RespEntity(String respCode, String respMsg, String data) {
+        this.respCode = respCode;
+        this.respMsg = respMsg;
+        this.data = data;
+    }
+
+    public static String success(Object object){
+        RespEntity respEntity = new RespEntity();
+        respEntity.setRespCode(ResponseCode.success);
+        respEntity.setRespMsg(ResponseMsg.success);
+        respEntity.setData(JSON.toJSONString(object));
+        return respEntity.toString();
+    }
+
+    public static String error(Object object){
+        RespEntity respEntity = new RespEntity();
+        respEntity.setRespCode(ResponseCode.error);
+        respEntity.setRespMsg(ResponseMsg.error);
+        return respEntity.toString();
+    }
 
     @Override
     public String toString() {
