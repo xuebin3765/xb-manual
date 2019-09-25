@@ -12,4 +12,19 @@ public class UserAddDTO extends UserDTO{
     private String repPassword;
     private String address;
 
+    public String getRepPassword() {
+        return repPassword;
+    }
+
+    public void setRepPassword(String repPassword) {
+        this.repPassword = repPassword;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
 }

@@ -54,10 +54,17 @@ public class RespEntity {
         return respEntity.toString();
     }
 
-    public static String error(Object object){
+    public static String error(String respCode, String respMsg){
+        RespEntity respEntity = new RespEntity();
+        respEntity.setRespCode(respCode);
+        respEntity.setRespMsg(respMsg);
+        return respEntity.toString();
+    }
+
+    public static String error(String respMsg){
         RespEntity respEntity = new RespEntity();
         respEntity.setRespCode(ResponseCode.error);
-        respEntity.setRespMsg(ResponseMsg.error);
+        respEntity.setRespMsg(respMsg);
         return respEntity.toString();
     }
 

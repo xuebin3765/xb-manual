@@ -16,11 +16,11 @@ public class BaseController {
         return RespEntity.success(object).toString();
     }
 
-    protected String error(Object object){
-        return RespEntity.success(object).toString();
+    protected String error(String respMsg){
+        return RespEntity.error(respMsg).toString();
     }
 
-    protected String error(Object object, String respCode, String respMsg){
-        return RespEntity.success(object).toString();
+    protected String error(String respCode, String respMsg){
+        return RespEntity.error(respCode, respMsg).toString();
     }
 }

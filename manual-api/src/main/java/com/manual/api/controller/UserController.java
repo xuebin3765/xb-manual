@@ -1,6 +1,7 @@
 package com.manual.api.controller;
 
 import com.manual.api.ApplicationManualApi;
+import com.manual.api.constant.ResponseMsg;
 import com.manual.api.dto.user.UserAddDTO;
 import com.manual.api.entity.User;
 import com.manual.api.service.UserService;
@@ -30,7 +31,14 @@ public class UserController extends BaseController{
     @RequestMapping("/add")
     public String add(@RequestBody @Valid UserAddDTO userAddDTO){
         logger.debug("step into add user: {}", userAddDTO);
-        User user = userService.add(userAddDTO);
+        User user = userService.findByUserName(userAddDTO.getUsername());
+        if (null != user){
+            return error(ResponseMsg.UserAlreadyExists);
+        }
+        user = userService.add(userAddDTO);
+        if (user == null){
+            return error("params has null");
+        }
         logger.debug("step out add user: ", user);
         return success(user);
     }

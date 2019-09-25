@@ -5,6 +5,6 @@ package com.manual.api.constant;
  * @Date 2019/9/24 23:09
  */
 public class ResponseCode {
-    public final static String success = "00000";
-    public final static String error = "99999";
+    public static final String success = "00000";
+    public static final String error = "99999";
 }
