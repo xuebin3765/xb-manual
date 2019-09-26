@@ -4,10 +4,11 @@ import com.google.common.collect.Lists;
 import lombok.Data;
 import org.hibernate.validator.HibernateValidator;
 
+import javax.validation.ConstraintViolation;
 import javax.validation.Validation;
 import javax.validation.Validator;
-import java.util.Collections;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 /**
@@ -25,6 +26,44 @@ public class ValidationUtil {
             .failFast(false) // 关闭快速结束模式
             .buildValidatorFactory()
             .getValidator();
+
+    /**
+     * 验证bean的所有字段
+     * @param t bean
+     * @param groups 校验组
+     * @param <T> bean class
+     * @return ValidResult
+     */
+    public static <T> ValidResult validBean(T t, Class<?>... groups){
+        ValidResult validResult = new ValidationUtil().new ValidResult();
+        Set<ConstraintViolation<T>> violationSet = validator.validate(t, groups);
+        boolean hasError = violationSet != null && violationSet.size() > 0;
+        validResult.setHasErrors(hasError);
+        if (hasError){
+            for (ConstraintViolation<T> violation: violationSet){
+                validResult.addError(violation.getPropertyPath().toString(), violation.getMessage());
+            }
+        }
+        return validResult;
+    }
+
+    /**
+     * 验证bean的某一个字段
+     * @param t bean
+     * @param propertyName 字段
+     * @return ValidResult
+     */
+    public static <T> ValidResult validBeanProperty(T t, String propertyName){
+        ValidResult result = new ValidationUtil().new ValidResult();
+        Set<ConstraintViolation<T>> violationSet = validator.validateProperty(t, propertyName);
+        boolean hasError = violationSet != null && violationSet.size() > 0;
+        if (hasError){
+            for (ConstraintViolation<T> violation: violationSet){
+                result.addError(violation.getPropertyPath().toString(), violation.getMessage());
+            }
+        }
+        return result;
+    }
 
     @Data
     public class ValidResult{
@@ -64,15 +103,20 @@ public class ValidationUtil {
                     .collect(Collectors.joining(", "));
         }
 
+        /**
+         * 返回所有错误信息
+         * @return str
+         */
         public String getErrors(){
-//            return String.join(",", errorMsgs)
             StringBuilder sb = new StringBuilder();
             for (ErrorMsg msg :errorMsgs) {
-                sb.append(msg.getPropertyPath())
+                sb.append("[")
+                        .append(msg.getPropertyPath())
                         .append(":")
-                        .append(msg.getMessage());
+                        .append(msg.getMessage())
+                        .append("]");
             }
-            return null;
+            return sb.toString();
         }
     }
 
