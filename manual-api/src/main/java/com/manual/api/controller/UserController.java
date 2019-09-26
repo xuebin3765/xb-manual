@@ -5,6 +5,7 @@ import com.manual.api.constant.ResponseMsg;
 import com.manual.api.dto.user.UserAddDTO;
 import com.manual.api.entity.User;
 import com.manual.api.service.UserService;
+import io.swagger.annotations.Api;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -19,6 +20,7 @@ import javax.validation.Valid;
  * author: xuebin3765@163.com
  * date: 2019/09/23
  */
+@Api("用户操作接口")
 @RestController
 @RequestMapping("/api/user")
 public class UserController extends BaseController{
