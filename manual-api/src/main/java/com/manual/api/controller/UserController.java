@@ -26,14 +26,15 @@ import javax.validation.Valid;
 @RequestMapping("/api/user")
 public class UserController extends BaseController{
 
-    private static final Logger logger = LoggerFactory.getLogger(ApplicationManualApi.class);
+
 
     @Resource
     private UserService userService;
 
     @RequestMapping(value = "/add",method = RequestMethod.POST)
     public String add(@RequestBody @Valid UserAddDTO userAddDTO){
-        logger.debug("step into add user: {}", userAddDTO);
+        debug("step into add user: {}", userAddDTO);
+        debug("step into add user");
         User user = userService.findByUserName(userAddDTO.getUserName());
         if (null != user){
             return error(ResponseMsg.UserAlreadyExists);
@@ -42,7 +43,7 @@ public class UserController extends BaseController{
         if (user == null){
             return error("params has null");
         }
-        logger.debug("step out add user: ", user);
+        debug("step out add user: ", user);
         return success(user);
     }
 }
