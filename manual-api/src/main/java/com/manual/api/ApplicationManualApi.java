@@ -23,13 +23,17 @@ public class ApplicationManualApi {
         String model = env.getProperty("spring.profiles.active");
         String port = env.getProperty("server.port");
 
-        logger.info("Access URLs:\n----------------------------------------------------------\n\t" +
+        logger.info("Access URLs:\n" +
+                        "----------------------------------------------------------\n\t" +
                         "Active: \t{}\n\t" +
                         "Local: \t\thttp://127.0.0.1:{}\n\t" +
-                        "External: \thttp://{}:{}\n----------------------------------------------------------",
+                        "External: \thttp://{}:{}\n\t" +
+                        "Swagger2: \thttp://127.0.0.1:{}/swagger-ui.html\n" +
+                        "----------------------------------------------------------",
                 model,
                 port,
                 InetAddress.getLocalHost().getHostAddress(),
+                port,
                 port);
 
     }

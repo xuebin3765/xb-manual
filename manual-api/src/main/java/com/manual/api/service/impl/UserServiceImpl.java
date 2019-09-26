@@ -27,19 +27,23 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User add(UserAddDTO userAddDTO) {
-        if (null == userAddDTO || StringUtils.isBlank(userAddDTO.getUsername())
+        if (null == userAddDTO || StringUtils.isBlank(userAddDTO.getUserName())
                 || StringUtils.isBlank(userAddDTO.getPassword())
                 || StringUtils.isBlank(userAddDTO.getRepPassword())){
             logger.debug("add has null values");
             return null;
         }
-        User user = new User();
-        BeanUtils.copyProperties(user, userAddDTO);
-        if (userAddDTO.getRepPassword().equals(user.getPassword())){
-            logger.debug("");
+        User user = null;
+        if (userAddDTO.getRepPassword().equals(userAddDTO.getPassword())){
+            user = new User();
+            BeanUtils.copyProperties(userAddDTO, user);
+            user = userRepository.save(user);
+            logger.debug("添加用户成功");
+        }else {
+            logger.debug("添加用户失败，两次密码不一致！");
         }
-//        userRepository.save(user);
-        return null;
+
+        return user;
     }
 
     @Override

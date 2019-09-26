@@ -10,6 +10,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
@@ -30,10 +31,10 @@ public class UserController extends BaseController{
     @Resource
     private UserService userService;
 
-    @RequestMapping("/add")
+    @RequestMapping(value = "/add",method = RequestMethod.POST)
     public String add(@RequestBody @Valid UserAddDTO userAddDTO){
         logger.debug("step into add user: {}", userAddDTO);
-        User user = userService.findByUserName(userAddDTO.getUsername());
+        User user = userService.findByUserName(userAddDTO.getUserName());
         if (null != user){
             return error(ResponseMsg.UserAlreadyExists);
         }
