@@ -1,7 +1,7 @@
 package com.manual.api.entity;
 
 
-import lombok.Data;
+import lombok.*;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
@@ -12,18 +12,30 @@ import java.io.Serializable;
  * author: xuebin3765@163.com
  * date: 2019/09/23
  */
-@Data
+@Builder
+@Setter
+@Getter
+@NoArgsConstructor
+@AllArgsConstructor
 @Table
 @Entity
 public class User implements Serializable {
 
     @Id
-    @Column
+    @Column(length = 64)
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
-    @Column
+    @Column(nullable = false, length = 64)
     private String userName;
-    @Column
+    @Column(nullable = false, length = 64)
     private String password;
+    @Column(length = 3)
+    private long createTime;
+    @Column(length = 32)
+    private long modifyTime;
+    @Column(length = 64)
+    private String email;
+    @Column(length = 16)
+    private String phoneNumber;
 
 }

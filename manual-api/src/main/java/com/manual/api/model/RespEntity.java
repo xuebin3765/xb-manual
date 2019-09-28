@@ -3,69 +3,82 @@ package com.manual.api.model;
 import com.alibaba.fastjson.JSON;
 import com.manual.api.constant.ResponseCode;
 import com.manual.api.constant.ResponseMsg;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 /**
  * desc:
  * author: xuebin3765@163.com
  * date: 2019/09/23
  */
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
+@Builder
 public class RespEntity {
     private String respCode;
     private String respMsg;
     private String data;
 
-    public String getRespCode() {
-        return respCode;
-    }
-
-    public void setRespCode(String respCode) {
-        this.respCode = respCode;
-    }
-
-    public String getRespMsg() {
-        return respMsg;
-    }
-
-    public void setRespMsg(String respMsg) {
-        this.respMsg = respMsg;
-    }
-
-    public String getData() {
-        return data;
-    }
-
-    public void setData(String data) {
-        this.data = data;
-    }
-
-    public RespEntity() {}
-
-    public RespEntity(String respCode, String respMsg, String data) {
-        this.respCode = respCode;
-        this.respMsg = respMsg;
-        this.data = data;
+    public static String success(){
+        return new RespEntity.RespEntityBuilder()
+                .respCode(ResponseCode.success)
+                .respMsg(ResponseMsg.success)
+                .build()
+                .toString();
     }
 
     public static String success(Object object){
-        RespEntity respEntity = new RespEntity();
-        respEntity.setRespCode(ResponseCode.success);
-        respEntity.setRespMsg(ResponseMsg.success);
-        respEntity.setData(JSON.toJSONString(object));
-        return respEntity.toString();
+        return new RespEntity.RespEntityBuilder()
+                .respCode(ResponseCode.success)
+                .respMsg(ResponseMsg.success)
+                .data(JSON.toJSONString(object))
+                .build()
+                .toString();
+    }
+
+    public static String success(Object object, String respMsg){
+        return new RespEntity.RespEntityBuilder()
+                .respCode(ResponseCode.success)
+                .respMsg(respMsg)
+                .data(JSON.toJSONString(object))
+                .build()
+                .toString();
+    }
+
+    public static String success(String respMsg){
+        return new RespEntity.RespEntityBuilder()
+                .respCode(ResponseCode.success)
+                .respMsg(respMsg)
+                .build()
+                .toString();
     }
 
     public static String error(String respCode, String respMsg){
-        RespEntity respEntity = new RespEntity();
-        respEntity.setRespCode(respCode);
-        respEntity.setRespMsg(respMsg);
-        return respEntity.toString();
+
+        return new RespEntity.RespEntityBuilder()
+                .respCode(respCode)
+                .respMsg(respMsg)
+                .build()
+                .toString();
     }
 
     public static String error(String respMsg){
-        RespEntity respEntity = new RespEntity();
-        respEntity.setRespCode(ResponseCode.error);
-        respEntity.setRespMsg(respMsg);
-        return respEntity.toString();
+        return new RespEntity.RespEntityBuilder()
+                .respMsg(respMsg)
+                .respCode(ResponseCode.error)
+                .build()
+                .toString();
+    }
+
+    public static String error(){
+        return new RespEntity.RespEntityBuilder()
+                .respMsg(ResponseMsg.error)
+                .respCode(ResponseCode.error)
+                .build()
+                .toString();
     }
 
     @Override

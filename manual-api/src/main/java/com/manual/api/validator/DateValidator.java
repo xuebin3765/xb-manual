@@ -1,8 +1,17 @@
 package com.manual.api.validator;
 
-import javax.validation.*;
+import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.time.DateUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import javax.validation.Constraint;
+import javax.validation.ConstraintValidator;
+import javax.validation.ConstraintValidatorContext;
+import javax.validation.Payload;
 import java.lang.annotation.*;
-import java.lang.reflect.Field;
+import java.text.ParseException;
+import java.util.Date;
 
 /**
  * desc:
@@ -15,6 +24,7 @@ import java.lang.reflect.Field;
 @Constraint(validatedBy = {DateValidator.DateValidatorInner.class})
 public @interface DateValidator {
 
+    Logger logger = LoggerFactory.getLogger(DateValidator.class);
     /**
      * 必须的属性
      * 显示 校验信息
@@ -46,12 +56,26 @@ public @interface DateValidator {
 
         @Override
         public void initialize(DateValidator constraintAnnotation) {
-
+            this.dateFormat = constraintAnnotation.dateFormat();
         }
 
+        /**
+         * 校验逻辑的实现
+         *
+         * @param value 需要校验的 值
+         * @return 布尔值结果
+         */
         @Override
         public boolean isValid(String value, ConstraintValidatorContext context) {
-            return false;
+            if (StringUtils.isBlank(value)) return true;
+
+            try {
+                Date date = DateUtils.parseDate(value, dateFormat);
+                return null != date;
+            } catch (ParseException e) {
+                logger.error("date format error, format:{}, value:{}", dateFormat, value);
+                return false;
+            }
         }
     }
 }

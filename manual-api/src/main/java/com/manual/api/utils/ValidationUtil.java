@@ -2,14 +2,22 @@ package com.manual.api.utils;
 
 import com.google.common.collect.Lists;
 import lombok.Data;
+import org.apache.commons.lang3.ClassUtils;
+import org.apache.commons.lang3.reflect.FieldUtils;
 import org.hibernate.validator.HibernateValidator;
 
 import javax.validation.ConstraintViolation;
 import javax.validation.Validation;
 import javax.validation.Validator;
+import java.lang.annotation.Annotation;
+import java.lang.reflect.Field;
+import java.lang.reflect.InvocationHandler;
+import java.lang.reflect.Proxy;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
+
 
 /**
  * desc: 参数验证工具类
@@ -36,6 +44,28 @@ public class ValidationUtil {
      */
     public static <T> ValidResult validBean(T t, Class<?>... groups){
         ValidResult validResult = new ValidationUtil().new ValidResult();
+        if (null == t) {
+            validResult.addError("requestBean", "null");
+            return validResult;
+        }
+        Class clazz = t.getClass();
+        Field[] fields = FieldUtils.getAllFields(clazz);
+        if (fields.length == 0) return validResult;
+        for (Field field: fields) {
+            Annotation[] annotations = field.getAnnotations();
+            if (annotations != null && annotations.length > 0){
+                for (Annotation annotation: annotations) {
+                    InvocationHandler invocationHandler = Proxy.getInvocationHandler(annotation);
+//                    Map<String, Object> map = getFieldValues(invocationHandler);
+//                    invocationHandler.invoke()
+                    String name = annotation.annotationType().getName();
+                    String anName = annotation.getClass().getName();
+                    String s = annotation.getClass().getSimpleName();
+                    System.out.println(anName);
+                }
+            }
+        }
+
         Set<ConstraintViolation<T>> violationSet = validator.validate(t, groups);
         boolean hasError = violationSet != null && violationSet.size() > 0;
         validResult.setHasErrors(hasError);
@@ -118,15 +148,16 @@ public class ValidationUtil {
             }
             return sb.toString();
         }
+
+        public boolean hasErrors(){
+            return errorMsgs != null && errorMsgs.size() > 0;
+        }
     }
 
     @Data
     public class ErrorMsg{
         private String propertyPath;
         private String message;
-
-        public ErrorMsg() {
-        }
 
         public ErrorMsg(String propertyPath, String message) {
             this.propertyPath = propertyPath;

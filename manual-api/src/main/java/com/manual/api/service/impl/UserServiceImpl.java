@@ -1,6 +1,8 @@
 package com.manual.api.service.impl;
 
-import com.manual.api.dto.user.UserAddDTO;
+import com.manual.api.controller.BaseLogs;
+import com.manual.api.dto.user.UserModifyDTO;
+import com.manual.api.dto.user.UserRegisterDTO;
 import com.manual.api.entity.User;
 import com.manual.api.repository.UserRepository;
 import com.manual.api.service.UserService;
@@ -8,7 +10,6 @@ import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -19,35 +20,52 @@ import javax.annotation.Resource;
  * date: 2019/09/23
  */
 @Service
-public class UserServiceImpl implements UserService {
+public class UserServiceImpl extends BaseLogs implements UserService {
 
     private Logger logger = LoggerFactory.getLogger(UserServiceImpl.class);
     @Resource
     private UserRepository userRepository;
 
     @Override
-    public User add(UserAddDTO userAddDTO) {
-        if (null == userAddDTO || StringUtils.isBlank(userAddDTO.getUserName())
-                || StringUtils.isBlank(userAddDTO.getPassword())
-                || StringUtils.isBlank(userAddDTO.getRepPassword())){
-            logger.debug("add has null values");
-            return null;
-        }
-        User user = null;
-        if (userAddDTO.getRepPassword().equals(userAddDTO.getPassword())){
-            user = new User();
-            BeanUtils.copyProperties(userAddDTO, user);
-            user = userRepository.save(user);
-            logger.debug("添加用户成功");
-        }else {
-            logger.debug("添加用户失败，两次密码不一致！");
-        }
-
-        return user;
+    public User findByUserName(String username) {
+        info("step into findByUserName, username: {}", username);
+        return userRepository.findUserByUserName(username);
     }
 
     @Override
-    public User findByUserName(String username) {
-        return null;
+    public User register(UserRegisterDTO registerDTO) {
+        info("step into register, registerDTO: {}", registerDTO);
+        User user = new User();
+        user.setCreateTime(System.currentTimeMillis());
+        user.setModifyTime(System.currentTimeMillis());
+        BeanUtils.copyProperties(registerDTO, user);
+        info("step out method register.");
+        debug("save user: {}", user);
+        return userRepository.save(user);
     }
+
+    @Override
+    public User findById(long id) {
+        info("step into findById, id: {}", id);
+        return userRepository.findUserById(id);
+    }
+
+    @Override
+    public User modify(User user, UserModifyDTO userModifyDTO) {
+        info("step into modify, User: {}, UserModifyDTO: {}", user, userModifyDTO);
+        user.setModifyTime(System.currentTimeMillis());
+        if (StringUtils.isNotBlank(userModifyDTO.getPassword())){
+            debug("step into modify, update password");
+            user.setPassword(userModifyDTO.getPassword());
+        }
+        info("step out modify");
+        return userRepository.saveAndFlush(user);
+    }
+
+    @Override
+    public void delete(User user) {
+        info("step into delete, user: {}", user);
+        userRepository.delete(user);
+    }
+
 }

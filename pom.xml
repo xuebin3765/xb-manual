@@ -9,6 +9,7 @@
   <version>1.0-SNAPSHOT</version>
   <modules>
     <module>manual-api</module>
+      <module>manual-common</module>
   </modules>
   <packaging>pom</packaging>
 
