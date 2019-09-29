@@ -5,7 +5,10 @@ import com.manual.api.dto.user.UserModifyDTO;
 import com.manual.api.dto.user.UserRegisterDTO;
 import com.manual.api.entity.User;
 import com.manual.api.service.UserService;
+import com.sun.xml.internal.xsom.impl.Ref;
 import io.swagger.annotations.Api;
+import jdk.internal.org.objectweb.asm.Type;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
@@ -26,7 +29,7 @@ public class UserController extends BaseController{
     @Resource
     private UserService userService;
 
-    @RequestMapping(value = "/register",method = RequestMethod.POST)
+    @RequestMapping(value = "/register",method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public String register(@RequestBody UserRegisterDTO registerDTO){
         info("step into register user: {}", registerDTO);
         Validator.ValidResult validResult = Validator.validBean(registerDTO);
@@ -51,7 +54,7 @@ public class UserController extends BaseController{
         return success(user);
     }
 
-    @RequestMapping(value = "/modify",method = RequestMethod.PUT)
+    @RequestMapping(value = "/modify",method = RequestMethod.PUT, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public String modify(@RequestBody @Valid UserModifyDTO userModifyDTO){
         debug("step into modify user: {}", userModifyDTO);
         Validator.ValidResult validResult = Validator.validBean(userModifyDTO);
@@ -70,7 +73,7 @@ public class UserController extends BaseController{
         return success(user);
     }
 
-    @RequestMapping(value = "/delete",method = RequestMethod.DELETE)
+    @RequestMapping(value = "/delete",method = RequestMethod.DELETE, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public String delete(@RequestParam long id){
         debug("step into delete user, id: {}", id);
 
