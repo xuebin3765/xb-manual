@@ -91,6 +91,11 @@
             <artifactId>guava</artifactId>
             <version>19.0</version>
         </dependency>
+        <dependency>
+            <artifactId>commons-validator</artifactId>
+            <groupId>xb.commons</groupId>
+            <version>1.0.1</version>
+        </dependency>
 
         <!--mysql-->
         <dependency>

@@ -1,14 +1,11 @@
 package com.manual.api.controller;
 
-import com.manual.api.constant.ResponseMsg;
 import com.manual.api.dto.user.UserModifyDTO;
 import com.manual.api.dto.user.UserRegisterDTO;
 import com.manual.api.entity.User;
 import com.manual.api.service.UserService;
-import com.manual.api.utils.ValidationUtil;
 import com.manual.api.validator.groups.RegisterGroup;
 import io.swagger.annotations.Api;
-import org.apache.commons.lang3.time.DateUtils;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
