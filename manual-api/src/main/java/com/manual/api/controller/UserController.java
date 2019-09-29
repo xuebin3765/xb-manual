@@ -1,10 +1,10 @@
 package com.manual.api.controller;
 
+import com.commons.validator.Validator;
 import com.manual.api.dto.user.UserModifyDTO;
 import com.manual.api.dto.user.UserRegisterDTO;
 import com.manual.api.entity.User;
 import com.manual.api.service.UserService;
-import com.manual.api.validator.groups.RegisterGroup;
 import io.swagger.annotations.Api;
 import org.springframework.web.bind.annotation.*;
 
@@ -12,7 +12,7 @@ import javax.annotation.Resource;
 import javax.validation.Valid;
 
 /**
- * desc:
+ * desc: 用户控制类
  * author: xuebin3765@163.com
  * date: 2019/09/23
  */
@@ -29,9 +29,9 @@ public class UserController extends BaseController{
     @RequestMapping(value = "/register",method = RequestMethod.POST)
     public String register(@RequestBody UserRegisterDTO registerDTO){
         info("step into register user: {}", registerDTO);
-        ValidationUtil.ValidResult validResult = ValidationUtil.validBean(registerDTO, RegisterGroup.class);
+        Validator.ValidResult validResult = Validator.validBean(registerDTO);
         if (validResult.isHasErrors()){
-            return error(validResult.getErrors());
+            return error(validResult.getSimpleErrors());
         }
         User user = userService.findByUserName(registerDTO.getUserName());
         if (null != user){
@@ -54,7 +54,10 @@ public class UserController extends BaseController{
     @RequestMapping(value = "/modify",method = RequestMethod.PUT)
     public String modify(@RequestBody @Valid UserModifyDTO userModifyDTO){
         debug("step into modify user: {}", userModifyDTO);
-        debug("step into add user");
+        Validator.ValidResult validResult = Validator.validBean(userModifyDTO);
+        if (validResult.isHasErrors()){
+            return error(validResult.getSimpleErrors());
+        }
         User user = userService.findById(userModifyDTO.getId());
         if (null == user){
             return error("用户不存在!");

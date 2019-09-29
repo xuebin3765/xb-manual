@@ -1,5 +1,6 @@
 package com.manual.api.dto.user;
 
+import com.commons.validator.annotation.Equals;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -23,5 +24,6 @@ public class UserModifyDTO implements Serializable {
     @NotNull
     private String password;
     @NotNull
+    @Equals("password")
     private String rePassword;
 }

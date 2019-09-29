@@ -1,8 +1,7 @@
 package com.manual.api.dto.user;
 
+import com.commons.validator.annotation.Email;
 import com.commons.validator.annotation.Equals;
-import com.manual.api.validator.DateValidator;
-import com.manual.api.validator.groups.RegisterGroup;
 import lombok.Data;
 
 
@@ -13,13 +12,10 @@ import lombok.Data;
  */
 @Data
 public class UserRegisterDTO extends UserDTO {
-    @Equals("password")
+    @Equals(value = "password", message = "两次密码不一致")
     private String repPassword;
-//    @NotNull
-//    @Pattern(regexp = "[A-z]+[A-z0-9_-]*\\\\@[A-z0-9]+\\\\.[A-z]+")
-    private String email;
 
-    @DateValidator(dateFormat = "yyyy-MM-dd", groups = {RegisterGroup.class})
-    private String birthday;
+    @Email("请输入正确的邮箱地址")
+    private String email;
 
 }
