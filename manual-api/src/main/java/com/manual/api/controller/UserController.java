@@ -1,6 +1,7 @@
 package com.manual.api.controller;
 
-import com.commons.validator.Validator;
+import com.commons.validator.ValidResult;
+import com.commons.validator.ValidatorFactory;
 import com.manual.api.dto.user.UserModifyDTO;
 import com.manual.api.dto.user.UserRegisterDTO;
 import com.manual.api.entity.User;
@@ -22,15 +23,13 @@ import javax.validation.Valid;
 @RequestMapping("/api/user")
 public class UserController extends BaseController{
 
-
-
     @Resource
     private UserService userService;
 
     @RequestMapping(value = "/register",method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public String register(@RequestBody UserRegisterDTO registerDTO){
         info("step into register user: {}", registerDTO);
-        Validator.ValidResult validResult = Validator.validBean(registerDTO);
+        ValidResult validResult = ValidatorFactory.validBean(registerDTO);
         if (validResult.isHasErrors()){
             return error(validResult.getSimpleErrors());
         }
@@ -55,7 +54,7 @@ public class UserController extends BaseController{
     @RequestMapping(value = "/modify",method = RequestMethod.PUT, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public String modify(@RequestBody @Valid UserModifyDTO userModifyDTO){
         debug("step into modify user: {}", userModifyDTO);
-        Validator.ValidResult validResult = Validator.validBean(userModifyDTO);
+        ValidResult validResult = ValidatorFactory.validBean(userModifyDTO);
         if (validResult.isHasErrors()){
             return error(validResult.getSimpleErrors());
         }

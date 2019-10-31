@@ -25,9 +25,9 @@
 </template>
 
 <script>
-  export default {
-    name: "main_content_list"
-  }
+    export default {
+        name: "main_content_list"
+    }
 </script>
 
 <style scoped>

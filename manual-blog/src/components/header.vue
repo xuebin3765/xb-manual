@@ -72,9 +72,10 @@
 </template>
 
 <script>
-  export default {
-    name: "header"
-  }
+    /* eslint-disable */
+    export default {
+        name: "header"
+    }
 </script>
 
 <style scoped>
